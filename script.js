@@ -2,14 +2,37 @@
 // var startPos = [42.42679066670903, -83.29210638999939];
 var startPos = [-1.300355, 36.773850];
 
-var speed = 200; // km/h
+var speed = 300; // km/h
 var rotation = 0;
-var delay = 10;
+var delay = 5;
+
+
+var coordinates = [
+            [-1.300355, 36.773850], 
+            [-1.300184, 36.776811], 
+            [-1.299840, 36.779386], 
+            [-1.298897, 36.779407], 
+            [-1.299004, 36.777841], 
+            [-1.298982, 36.776811], 
+            [-1.297459, 36.776747], 
+            [-1.296193, 36.776726], 
+            [-1.296097, 36.779236], 
+            [-1.296151, 36.777637],
+            [-1.296215, 36.776693], 
+            [-1.294252, 36.776586], 
+            [-1.294048, 36.776790],
+            [-1.293973, 36.779118], 
+            [-1.292622, 36.779075], 
+            [-1.291844, 36.779049], 
+            [-1.291879, 36.778389]
+
+
+        ];
 
 
 function animateMarker(marker, coords, km_h)
 {
-    // console.log(marker.icon);
+    //// console.log(marker.icon);
     // marker.icon.rotation = rotation;
 
 
@@ -38,23 +61,29 @@ function animateMarker(marker, coords, km_h)
         var deltaLat = (coords[target][0] - lat) / numStep;
         var deltaLng = (coords[target][1] - lng) / numStep;
 
-// console.log(lat);
+        var next = target + 1;
+        var endLat = coords[next][0];
+        var endLong = coords[next][1];
 
-            if(lat == -1.300355 || lat == -1.300184 || lat == -1.296193 || lat == -1.294048 ){
-             url = 'car2.svg';
-            }else if(lat == -1.299840 || lat == -1.298982 || lat == -1.297459 || lat == -1.296215 || lat == -1.293973 || lat == -1.293973 || lat == -1.292622){
-             url = 'car4.svg';
-            }else if(lat == -1.294252){
-                url = 'car5.svg';
 
-            }else{
-                url = 'car3.svg';
-            }
-    // //     // console.log(coords[target][0]);
-    marker.icon.url = url;
+// console.log()
 
-    // console.log(marker.icon.rotation)
+        var heading = google.maps.geometry.spherical.computeHeading(dest, marker.position);
 
+        
+var car = "M17.402,0H5.643C2.526,0,0,3.467,0,6.584v34.804c0,3.116,2.526,5.644,5.643,5.644h11.759c3.116,0,5.644-2.527,5.644-5.644 V6.584C23.044,3.467,20.518,0,17.402,0z M22.057,14.188v11.665l-2.729,0.351v-4.806L22.057,14.188z M20.625,10.773 c-1.016,3.9-2.219,8.51-2.219,8.51H4.638l-2.222-8.51C2.417,10.773,11.3,7.755,20.625,10.773z M3.748,21.713v4.492l-2.73-0.349 V14.502L3.748,21.713z M1.018,37.938V27.579l2.73,0.343v8.196L1.018,37.938z M2.575,40.882l2.218-3.336h13.771l2.219,3.336H2.575z M19.328,35.805v-7.872l2.729-0.355v10.048L19.328,35.805z";
+// var icon = {
+//   path: car,
+        marker.setIcon({
+            path: car,
+            strokeColor: 'rgb(26, 127, 195)',
+            strokeWeight: 3,
+            scale: 0.6,
+            rotation: google.maps.geometry.spherical.computeHeading(dest, marker.position)
+          })
+
+
+// }
         
         function moveMarker()
         {
@@ -72,15 +101,23 @@ function animateMarker(marker, coords, km_h)
             else
             {   marker.setPosition(dest);
                 target++;
+               // console.log(lng);
+                //// console.log(step);
                 if (target == coords.length){ target = 0; }
                 
                 setTimeout(goToPoint, delay);
             }
+
+            
         }
         moveMarker();
     }
     goToPoint();
 }
+
+
+
+
 
 function initialize()
 {
@@ -93,12 +130,7 @@ function initialize()
     };
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   
-    var icon = {
-          url: 'car2.svg',
-          size: new google.maps.Size(30, 32),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(0, 1)
-        };
+    // 
 
 
     var flightPlanCoordinates = [
@@ -133,35 +165,12 @@ function initialize()
     
     marker = new google.maps.Marker({
         position: new google.maps.LatLng(startPos[0], startPos[1]),
-        map: map,
-        icon: icon
+        map: map
     });
-    // console.log(marker.position);
+    //// console.log(marker.position);
     google.maps.event.addListenerOnce(map, 'idle', function()
     {
-        animateMarker(marker, [
-            // The coordinates of each point you want the marker to go to.
-            // You don't need to specify the starting position again.
-            [-1.300355, 36.773850], 
-            [-1.300184, 36.776811], 
-            [-1.299840, 36.779386], 
-            [-1.298897, 36.779407], 
-            [-1.299004, 36.777841], 
-            [-1.298982, 36.776811], 
-            [-1.297459, 36.776747], 
-            [-1.296193, 36.776726], 
-            [-1.296097, 36.779236], 
-            [-1.296151, 36.777637],
-            [-1.296215, 36.776693], 
-            [-1.294252, 36.776586], 
-            [-1.294048, 36.776790],
-            [-1.293973, 36.779118], 
-            [-1.292622, 36.779075], 
-            [-1.291844, 36.779049], 
-            [-1.291879, 36.778389]
-
-
-        ], speed);
+        animateMarker(marker, coordinates, speed);
     });
 }
 
